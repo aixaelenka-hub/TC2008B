@@ -1,4 +1,4 @@
-/*
+/* Its horrible it can stay horrible
  * Script to draw a color triangle using WebGL 2
  * Based on the tutorials at:
  * https://webgl2fundamentals.org/webgl/lessons/resources/webgl-state-diagram.html?exampleId=rainbow-triangle#no-help
@@ -8,6 +8,7 @@
  */
 
 
+//vertex shader
 const vsGLSL = `#version 300 es
 in vec4 position;
 in vec4 color;
@@ -20,6 +21,7 @@ void main() {
 }
 `;
 
+//fragment shader
 const fsGLSL = `#version 300 es
 precision highp float;
 
@@ -28,7 +30,8 @@ in vec4 v_color;
 out vec4 outColor;
 
 void main() {
-    outColor = v_color;
+    //outColor = v_color;
+    outColor = vec4(1,0,1,1); //this basically changes the color
 }
 `;
 

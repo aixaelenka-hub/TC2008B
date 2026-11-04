@@ -8,7 +8,10 @@
 
 import * as twgl from 'twgl-base.js';
 
-// Vertex Shader as a string
+// Vertex Shader as a string, runs once per vertex
+//----------------------------------------------------//
+//in us for input, it receives the position and color of the vertex
+//out for output, it passes to the fragment shader 
 const vsGLSL = `#version 300 es
 in vec4 a_position;
 in vec4 a_color;
@@ -20,8 +23,12 @@ void main() {
     v_color = a_color;
 }
 `;
+//fl_position is where the vertex ends up on the screen
+//the v_color is just the blended color painted on the vertex
+//
 
-// Fragment Shader as a string
+// Fragment Shader as a string, runs once per pixel covered by the triangle
+//outcolor is the final color painted in the pixel
 const fsGLSL = `#version 300 es
 precision highp float;
 
@@ -45,7 +52,7 @@ function main_twgl(): void {
     if (!gl) {
         throw new Error('WebGL2 is not supported by this browser');
     }
-
+    //basicallt compiles both shaders a twgl shortcut
     const programInfo = twgl.createProgramInfo(gl, [vsGLSL, fsGLSL]);
     //console.log(programInfo.program);
 
@@ -58,7 +65,7 @@ function main_twgl(): void {
     gl.bindVertexArray(vao);
     gl.useProgram(programInfo.program);
 
-    // compute 3 vertices for 1 triangle
+    // compute 3 vertices for 1 triangle, this is the draw call
     twgl.drawBufferInfo(gl, bufferInfo);
 }
 
@@ -70,6 +77,7 @@ function generateData(): twgl.Arrays {
     const arrays: twgl.Arrays = {
         a_position: {
             // Two components for the coordinates in X and Y
+            //the order tells it if they are connected
             numComponents: 2,
             data: new Float32Array([
                  0.0,   0.7,
@@ -79,7 +87,8 @@ function generateData(): twgl.Arrays {
         },
         a_color: {
             // Four components for the color (RGBA)
-            numComponents: 4,
+            numComponents: 4, 
+            //how many values do you have per vertex
             /*
             // If not type is indicated, twgl will assume a type of float
             data: [
