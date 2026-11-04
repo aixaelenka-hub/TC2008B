@@ -11,6 +11,7 @@
 import * as twgl from 'twgl-base.js';
 
 // Vertex Shader as a string
+//here we are now storing the resoltuion 
 const vsGLSL = `#version 300 es
 in vec2 a_position;
 in vec4 a_color;
@@ -29,7 +30,9 @@ void main() {
     // Convert from 0->2 to -1->1 (clip space)
     vec2 clipSpace = zeroToTwo - 1.0;
 
-    // Set the final position for the vertex
+    // Set the final position for the vertex,
+    //2 elements come from the clipspace (x,y)
+    //then we give z= 0 w=1. This converts 2d to 3d 
     gl_Position = vec4(clipSpace, 0, 1);
 
     // Pass the color to the fragment shader

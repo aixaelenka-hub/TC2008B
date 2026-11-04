@@ -2,6 +2,7 @@
 in vec2 a_position;
 
 uniform vec2 u_resolution;
+//I recieve a matriz 3
 uniform mat3 u_transforms;
 
 vec4 projection2D(vec2 position, vec2 resolution) {

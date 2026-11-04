@@ -70,7 +70,7 @@ function generateData(sides: number): twgl.Arrays {
     const colorData: number[] = [];
     const indexData: number[] = [];
 
-    // Initialize the center vertex, at the origin and with white color
+    // Initialize the center vertex in 0,0 , at the origin and with white color (that's the one 1 1 1 1)
     positionData.push(0);
     positionData.push(0);
     colorData.push(1);
@@ -78,6 +78,7 @@ function generateData(sides: number): twgl.Arrays {
     colorData.push(1);
     colorData.push(1);
 
+    //for a circle. you divide 360 degrees by the number of sides you have, for example 6
     const angleStep = 2 * Math.PI / sides;
 
     // Loop over the sides to create the rest of the vertices
