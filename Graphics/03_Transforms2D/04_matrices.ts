@@ -40,6 +40,7 @@ function main() {
 }
 
 // Function to do the actual display of the objects
+//scale, rotate, translate
 function drawScene(
     gl: WebGL2RenderingContext,
     vao: WebGLVertexArrayObject,

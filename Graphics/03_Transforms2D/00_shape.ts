@@ -12,7 +12,12 @@ import * as twgl from 'twgl-base.js'
 import { shapeF } from '../libs/shapes.js'
 
 // Import the shaders from external files
+//importing raw means it brings the contents of the file as a string.
+//We do this to bring in the shaders, 
 import vsGLSL from './vs_00_no_transform.glsl?raw';
+//this shader flips/inverts the y axis. so the first point of f instead of showing up at 0,0 it appears at the top...
+
+
 import fsGLSL from './fs_flat_color.glsl?raw';
 
 function main() : void {

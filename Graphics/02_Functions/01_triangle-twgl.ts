@@ -13,9 +13,11 @@ import * as twgl from 'twgl-base.js';
 //in us for input, it receives the position and color of the vertex
 //out for output, it passes to the fragment shader 
 const vsGLSL = `#version 300 es
+// Attributes
 in vec4 a_position;
 in vec4 a_color;
 
+// Varying
 out vec4 v_color;
 
 void main() {
@@ -38,7 +40,7 @@ out vec4 outColor;
 
 void main() {
     outColor = v_color;
-    //outColor = vec4(1, 0, 1, 1);
+    //outColor = vec4(0, 1, 0, 1);
 }
 `;
 
