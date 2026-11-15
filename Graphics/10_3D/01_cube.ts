@@ -76,7 +76,8 @@ class CubeOneScene extends Scene {
         gl.clearColor(0, 0, 0, 1);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // tell webgl to cull faces
+        // tell webgl to cull faces, you use the dot product to know which points are in view and which aren't.
+        //normal vector = cross product
         gl.enable(gl.CULL_FACE);
 
         gl.useProgram(programInfo.program);

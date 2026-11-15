@@ -178,7 +178,7 @@ export class M4 {
              0,  0,  0,  1
         ]);
     }
-
+    //HASTA AQUI
     /**
      * Takes the transpose of a matrix.
      * @param {M4} m The matrix.

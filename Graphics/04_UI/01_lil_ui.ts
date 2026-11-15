@@ -68,6 +68,7 @@ let arrays : twgl.Arrays = undefined;
 let vao : WebGLVertexArrayObject;
 
 // Variable with the data for the object transforms, controlled by the UI
+//An object called object and inside has 4 objects. 
 const object = {
     // Translation
     t: {
@@ -84,6 +85,8 @@ const object = {
         x: 0.7,
         y: 1.6,
         z: 1.0},
+
+        //an array of colors
     color: [
         Math.random(),
         Math.random(),
@@ -115,7 +118,7 @@ function main(): void {
     vao = twgl.createVAOFromBufferInfo(gl, programInfo, bufferInfo);
 
     setupUI(gl);
-
+    //The one in charge of displaying: 
     drawScene(gl);
 }
 
@@ -161,7 +164,9 @@ function setupUI(gl : WebGLRenderingContext): void {
     const gui = new GUI();
 
     const traFolder = gui.addFolder('Translation');
+    //object.t is the one that I' modifying... 
     traFolder.add( object.t, 'x', 0, gl.canvas.width)
+    //traFolder.add( object.t, 'x') without the start and end values it becomes a written field. Indirectly the values given declare the type of fild that appears 
         .onChange( (value : number) => {
             object.t.x = value;
         });

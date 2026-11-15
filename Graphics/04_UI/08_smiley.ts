@@ -11,6 +11,7 @@ import * as twgl from 'twgl-base.js';
 import GUI from 'lil-gui';
 import { diamond, shapeF_centered, smiley } from '../libs/shapes.js';
 import { V2, M3, type Vec2, type Mat3 } from '../libs/2d-lib.js';
+//this one uses scene 
 import { Scene } from '../libs/scene.js';
 import { type Color } from '../libs/color.js';
 
@@ -28,12 +29,13 @@ class RotationScene extends Scene {
         super(gl, vsGLSL, fsGLSL);
 
         // Create the objects for this scene
+        //smiley(150)
         const model = this.addObject('model', smiley(150),
             [ Math.random(), Math.random(), Math.random(), 1 ]);
         model.transforms.t.x = gl.canvas.width / 2;
         model.transforms.t.y = gl.canvas.height / 2;
 
-        const pivot = this.addObject('pivot', diamond(30),
+        const pivot = this.addObject('pivot', diamond(5),
             [ 0.6, 0.6, 0.6, 1]);
         pivot.transforms.t.x = gl.canvas.width / 2;
         pivot.transforms.t.y = gl.canvas.height / 2;
@@ -58,17 +60,31 @@ class RotationScene extends Scene {
 
         // Transform matrices for the model
         // TODO: Create the matrices necessary
-
-
-
-        // Create a composite transform matrix
-        let modelTransforms: Mat3 = M3.identity();
-        // TODO: Multiply the matrices in the correct order to obtain the required results
-
+        // Vector to translate the pivot to the center of the world
+        const v2_model_to_center: Vec2 = V2.create(-pivot.transforms.t.x,
+                                                   -pivot.transforms.t.y);
+        // Vector to translate the pivot back to its original position
+        const v2_center_to_model: Vec2 = V2.create(pivot.transforms.t.x,
+                                                   pivot.transforms.t.y);
 
 
 
         gl.useProgram(programInfo.program);
+        // Transform matrices for the pivot
+        //const translateMatrixmodel: Mat3 = M3.translation(v2_center_to_model);
+        const translateMatrixmodel: Mat3 = M3.translation(v2_trans);
+        const scaleMatrixmodel: Mat3 = M3.scale(v2_scale);
+        const firstTrans: Mat3 =M3.translation (v2_pivot_to_center);
+        const rotateMatrixmodel: Mat3 = M3.rotation(model.transforms.rr.z);
+        const rotate2: Mat3 =M3.translation(v2_center_to_pivot);
+        let modelRotate: Mat3 =M3.multiply(rotateMatrixmodel, firstTrans);
+        modelRotate =M3.multiply (rotate2, modelRotate);
+
+        // Composite transform matrix for the pivot (only translation)
+        let modelTransforms: Mat3 = M3.identity();
+        modelTransforms = M3.multiply(scaleMatrixmodel, modelTransforms);
+        modelTransforms = M3.multiply(translateMatrixmodel, modelTransforms);
+        modelTransforms = M3.multiply(modelRotate, modelTransforms);
 
         let uniforms = {
             u_resolution: [gl.canvas.width, gl.canvas.height],
@@ -131,11 +147,11 @@ class RotationScene extends Scene {
                 model.transforms.s.y = value;
             });
 
-        const colorFolder = modelFolder.addFolder('Color');
-        colorFolder.addColor(model, 'color')
-            .onChange((value: Color) => {
-                model.color = value;
-            });
+        //const colorFolder = modelFolder.addFolder('Color');
+        //colorFolder.addColor(model, 'color')
+            //.onChange((value: Color) => {
+                //model.color = value;
+            //});
 
         const pivotFolder = gui.addFolder('Pivot');
         const pivotTraFolder = pivotFolder.addFolder('Translation');

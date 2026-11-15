@@ -34,6 +34,13 @@ export class V2 {
         return dest;
     }
 
+     static subtract(u: Vec2, v: Vec2, dest?: Vec2): Vec2 {
+        dest = dest || new Float32Array(2);
+        dest[X] = u[X] - v[X];
+        dest[Y] = u[Y] - v[Y];
+        return dest;
+    }
+
     // TODO: Add the methods: subtract and scale
     // - subtract: receives two Vec2, and an optional 3rd Vec2.
     //      returns the result of the subtraction inside of the 3rd Vec2
@@ -70,8 +77,8 @@ export class M3 {
         let c = Math.cos(angleRadians);
         let s = Math.sin(angleRadians);
         return [
-            c,  -s,  0,
-            s,  c,  0,
+            c,  s,  0,
+            -s,  c,  0,
             0,  0,  1,
         ];
     }
