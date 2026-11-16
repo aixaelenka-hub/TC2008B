@@ -32,6 +32,18 @@ class RotationScene extends Scene {
         pivot.transforms.t.y = gl.canvas.height / 2;
     }
 
+    //Dropdown options
+
+    setting = { transformOrder: 's->t->r'};
+    objstrings = { 
+        's->r->t':'srt',
+        's->t->r':'str',
+        't->s->r':'tsr',
+        'r->t->s':'rts',
+        'r->s->t':'rst'
+
+
+    }
     // Method to render the scene on the canvas.
     protected render(): void {
         const { gl, programInfo } = this;
@@ -66,13 +78,40 @@ class RotationScene extends Scene {
         //combine matrices 
         let modelRotate: Mat3 =M3.multiply(rotateMatrixmodel, firstTrans);
         modelRotate =M3.multiply (rotate2, modelRotate);
-
-        
         let modelTransforms: Mat3 = M3.identity();
-        modelTransforms = M3.multiply(scaleMatrixmodel, modelTransforms);
-        modelTransforms = M3.multiply(translateMatrixmodel, modelTransforms);
-        modelTransforms = M3.multiply(modelRotate, modelTransforms);
 
+        if (this.setting.transformOrder === 's->r->t'){
+            modelTransforms = M3.multiply(scaleMatrixmodel, modelTransforms); 
+            modelTransforms = M3.multiply(modelRotate, modelTransforms);
+            modelTransforms = M3.multiply(translateMatrixmodel, modelTransforms);
+
+        }
+
+        else if (this.setting.transformOrder === 's->t->r'){
+            modelTransforms = M3.multiply(scaleMatrixmodel, modelTransforms); 
+            modelTransforms = M3.multiply(translateMatrixmodel, modelTransforms);
+            modelTransforms = M3.multiply(modelRotate, modelTransforms);
+        }
+
+        else if (this.setting.transformOrder === 't->s->r'){
+            modelTransforms = M3.multiply(translateMatrixmodel, modelTransforms);
+            modelTransforms = M3.multiply(scaleMatrixmodel, modelTransforms); 
+            modelTransforms = M3.multiply(modelRotate, modelTransforms);
+        }
+
+        else if (this.setting.transformOrder === 'r->t->s'){
+            modelTransforms = M3.multiply(modelRotate, modelTransforms);
+            modelTransforms = M3.multiply(translateMatrixmodel, modelTransforms);
+            modelTransforms = M3.multiply(scaleMatrixmodel, modelTransforms);  
+        }
+
+        else if (this.setting.transformOrder === 'r->s->t'){
+            modelTransforms = M3.multiply(modelRotate, modelTransforms);
+            modelTransforms = M3.multiply(scaleMatrixmodel, modelTransforms);  
+            modelTransforms = M3.multiply(translateMatrixmodel, modelTransforms);
+        }
+
+    
         //Sends to the shader
         let uniforms = {
             u_resolution: [gl.canvas.width, gl.canvas.height],
@@ -109,6 +148,9 @@ class RotationScene extends Scene {
         const gui = new GUI();
 
         const modelFolder = gui.addFolder('Model');
+        const opFolder = modelFolder.addFolder('Op');
+        opFolder.add(this.setting, 'transformOrder', Object.keys(this.objstrings)).name('Transformation Order').onChange ((value:string)=> {this.setting.transformOrder= value;})
+
 
         const traFolder = modelFolder.addFolder('Translation');
         traFolder.add(model.transforms.t, 'x', 0, gl.canvas.width)
